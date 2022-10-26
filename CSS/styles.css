@@ -1,0 +1,16 @@
+.base, .iva, .import{
+    display: inline-block;
+}
+
+th{
+    padding: 0 80px;
+}
+
+th, td{
+    border: 1px solid black;
+    align-items: center;
+}
+
+.input{
+    width: 20px;
+}
