@@ -1,3 +1,5 @@
+import { crearColumnes } from "./article.mjs";
+
 class Factura{
     constructor(codi_factura, codis, noms, quantitats, preus, totals, base_imposable, iva, import_factura){
         this.codi_factura = codi_factura;
@@ -118,19 +120,19 @@ function canvisTotal() {
 
     
     if (total != 0) {
-        var taula = document.getElementsByTagName("table")[0];
-        var n_files = taula.rows.length;
-        var codis = [];
-        var noms = [];
-        var quantitats = [];
-        var preus = [];
-        var totals = [];
+        let taula = document.getElementsByTagName("table")[0];
+        let n_files = taula.rows.length;
+        let codis = [];
+        let noms = [];
+        let quantitats = [];
+        let preus = [];
+        let totals = [];
         for (let i = 0; i < n_files - 1; i++) {
-            var codi = document.getElementsByClassName("codi")[i].innerHTML;
-            var nom = document.getElementsByClassName("nom")[i].innerHTML;
-            var quantitat = document.getElementsByClassName("quantitat")[i].value;
-            var preu = document.getElementsByClassName("preu")[i].innerHTML;
-            var total = document.getElementsByClassName("total")[i].innerHTML;
+            let codi = document.getElementsByClassName("codi")[i].innerHTML;
+            let nom = document.getElementsByClassName("nom")[i].innerHTML;
+            let quantitat = document.getElementsByClassName("quantitat")[i].value;
+            let preu = document.getElementsByClassName("preu")[i].innerHTML;
+            let total = document.getElementsByClassName("total")[i].innerHTML;
 
             codis.push(codi);
             noms.push(nom);
@@ -178,51 +180,13 @@ function recuperarFactura(){
             document.getElementsByTagName("p")[0].innerHTML = "2022/" + factura_recuperada.getCodiFactura();
 
             var taula = document.getElementsByTagName("table")[0];
-            taula.innerHTML = "<tr><th>Codi</th><th>Nom</th><th>Quantitat</th><th>Preu</th><th>Total</th></tr>"
+            taula.innerHTML = "<tr><th>Codi</th><th>Nom</th><th>Quantitat</th><th>Preu</th><th>Total</th></tr>";
             var n_columnes = taula.rows[0].cells.length;
             for (let x = 0; x < factura_recuperada.getCodis().length; x++) {
                 var n_files = taula.rows.length;
                 var fila = taula.insertRow(n_files);
-
-                for (let i = 0; i < n_columnes; i++) {
-                    let columna = document.createElement("td");
-                    columna = fila.insertCell(i);
-        
-                    switch (i) {
-                        case 0:
-                            columna.setAttribute("class", "codi");
-                            columna.innerHTML = factura_recuperada.getCodis()[x];
-                            break;
-        
-                        case 1:
-                            columna.setAttribute("class", "nom");
-                            columna.innerHTML = factura_recuperada.getNoms()[x];
-                            break;
-        
-                        case 2:
-                            let input = document.createElement("input");
-                            input.setAttribute("type", "number");
-                            input.setAttribute("value", factura_recuperada.getQuantitats()[x]);
-                            input.setAttribute("class", "quantitat");
-                            input.addEventListener("change", calcularTotal);
-                            input.addEventListener("change", canvisTotal);
-                            columna.appendChild(input);
-                            break;
-        
-                        case 3:
-                            columna.setAttribute("class", "preu");
-                            columna.innerHTML = factura_recuperada.getPreus()[x];
-                            break;
-        
-                        case 4:
-                            columna.setAttribute("class", "total");
-                            columna.innerHTML = factura_recuperada.getTotals()[x];
-                            break;
-        
-                        default:
-                            break;
-                    }
-                }
+                crearColumnes(n_columnes, fila, factura_recuperada.getCodis()[x], factura_recuperada.getNoms()[x], 
+                factura_recuperada.getQuantitats()[x], factura_recuperada.getPreus()[x], factura_recuperada.getTotals()[x]);   
             }
 
             document.getElementsByTagName("p")[1].innerHTML = factura_recuperada.getBaseImposable();

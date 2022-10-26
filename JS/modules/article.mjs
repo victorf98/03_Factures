@@ -24,6 +24,7 @@ class Article {
         return this.preu;
     }
 }
+
 var google_pixel_7 = new Article("101", "Google Pixel 7", 0, 649);
 var google_pixel_7_pro = new Article("102", "Google Pixel 7 Pro", 0, 899);
 var samsung_galaxy_s22 = new Article("201", "Samsung Galaxy S22", 0, 859);
@@ -89,49 +90,8 @@ function afegirArticle() {
         calcularTotal();
         canvisTotal();
     } else {
-
         var fila = taula.insertRow(n_files);
-        var mobil = [mobil_seleccionat.getCodi(), mobil_seleccionat.getNom(), 0, mobil_seleccionat.getPreu()]
-
-        for (let i = 0; i < n_columnes; i++) {
-            let columna = document.createElement("td");
-            columna = fila.insertCell(i);
-
-            switch (i) {
-                case 0:
-                    columna.setAttribute("class", "codi");
-                    columna.innerHTML = mobil[i];
-                    break;
-
-                case 1:
-                    columna.setAttribute("class", "nom");
-                    columna.innerHTML = mobil[i];
-                    break;
-
-                case 2:
-                    let input = document.createElement("input");
-                    input.setAttribute("type", "number");
-                    input.setAttribute("value", mobil[i]);
-                    input.setAttribute("class", "quantitat");
-                    input.addEventListener("change", calcularTotal);
-                    input.addEventListener("change", canvisTotal);
-                    columna.appendChild(input);
-                    break;
-
-                case 3:
-                    columna.setAttribute("class", "preu");
-                    columna.innerHTML = mobil[i];
-                    break;
-
-                case 4:
-                    columna.setAttribute("class", "total");
-                    columna.innerHTML = 0;
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        crearColumnes(n_columnes, fila, mobil_seleccionat.getCodi(), mobil_seleccionat.getNom(), 0, mobil_seleccionat.getPreu(), 0);
     }
 }
 
@@ -140,4 +100,46 @@ function loadAfegir() {
     botoAfegir.onclick = afegirArticle;
 }
 
-export { dropdown, mobils, afegirArticle, loadAfegir };
+function crearColumnes(n_columnes, fila, codi, nom, quantitat, preu, total) {
+    for (let i = 0; i < n_columnes; i++) {
+        let columna = document.createElement("td");
+        columna = fila.insertCell(i);
+
+        switch (i) {
+            case 0:
+                columna.setAttribute("class", "codi");
+                columna.innerHTML = codi;
+                break;
+
+            case 1:
+                columna.setAttribute("class", "nom");
+                columna.innerHTML = nom;
+                break;
+
+            case 2:
+                let input = document.createElement("input");
+                input.setAttribute("type", "number");
+                input.setAttribute("value", quantitat);
+                input.setAttribute("class", "quantitat");
+                input.addEventListener("change", calcularTotal);
+                input.addEventListener("change", canvisTotal);
+                columna.appendChild(input);
+                break;
+
+            case 3:
+                columna.setAttribute("class", "preu");
+                columna.innerHTML = preu;
+                break;
+
+            case 4:
+                columna.setAttribute("class", "total");
+                columna.innerHTML = total;
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+export { dropdown, mobils, afegirArticle, loadAfegir, crearColumnes};
