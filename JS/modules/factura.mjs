@@ -87,10 +87,12 @@ class Factura{
 
 var factura = new Factura(parseInt(localStorage.getItem("last_key")) + 1);
 
+//Carrega el nº d'una nova factura
 function novaFactura(){
     document.getElementsByTagName("p")[0].innerHTML = "2022/" + factura.getCodiFactura();
 }
 
+//Calcula el total de preu d'un article
 function calcularTotal() {
     var inputs = document.getElementsByClassName("quantitat");
     var totals = document.getElementsByClassName("total");
@@ -102,6 +104,7 @@ function calcularTotal() {
     }
 }
 
+//Pinta la base imposable, l'iva i l'import
 function canvisTotal() {
     var totals = document.getElementsByClassName("total");
     var suma_totals = 0;

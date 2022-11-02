@@ -22,6 +22,7 @@ var xiaomi_12_pro = new Article("402", "Xiaomi 12 Pro", 0, 1099);
 var oneplus_10 = new Article("501", "Oneplus 10", 0, 909);
 var nothing_phone_1 = new Article("601", "Nothing Phone 1", 0, 469);
 
+//Carrega els valors del dropdown
 function dropdown() {
     var mobils = [iphone_14.getNom(), iphone_14_pro.getNom(), samsung_galaxy_s22.getNom(),
     samsung_galaxy_s22_ultra.getNom(), google_pixel_7.getNom(), google_pixel_7_pro.getNom(),
@@ -35,48 +36,10 @@ function dropdown() {
     }
 }
 
-function crearColumnes(n_columnes, fila, codi, nom, quantitat, preu, total) {
-    for (let i = 0; i < n_columnes; i++) {
-        let columna = document.createElement("td");
-        columna = fila.insertCell(i);
-
-        switch (i) {
-            case 0:
-                columna.setAttribute("class", "codi");
-                columna.innerHTML = codi;
-                break;
-
-            case 1:
-                columna.setAttribute("class", "nom");
-                columna.innerHTML = nom;
-                break;
-
-            case 2:
-                let input = document.createElement("input");
-                input.setAttribute("type", "number");
-                input.setAttribute("value", quantitat);
-                input.setAttribute("class", "quantitat");
-                input.addEventListener("change", calcularTotal);
-                input.addEventListener("change", canvisTotal);
-                columna.appendChild(input);
-                break;
-
-            case 3:
-                columna.setAttribute("class", "preu");
-                columna.innerHTML = preu;
-                break;
-
-            case 4:
-                columna.setAttribute("class", "total");
-                columna.innerHTML = total;
-                break;
-
-            default:
-                break;
-        }
-    }
-}
-
+/**
+ * Afegeix articles a la factura,
+ * si l'article ja hi és, es sumarà 1 a la quantitat
+ */
 function afegirArticle() {
     var mobils = [
         google_pixel_7,
@@ -123,12 +86,66 @@ function afegirArticle() {
     }
 }
 
+//Afegeix onclick a afegirArticle
 function loadAfegir() {
     var botoAfegir = document.getElementsByTagName("button")[0];
     botoAfegir.onclick = afegirArticle;
 }
 
+/**
+ * Crea les columnes d'una nova fila amb els valors passats
+ * 
+ * @param {number} n_columnes 
+ * @param {HTMLTableRowElement} fila 
+ * @param {string} codi 
+ * @param {string} nom 
+ * @param {number} quantitat 
+ * @param {number} preu 
+ * @param {number} total 
+ */
+function crearColumnes(n_columnes, fila, codi, nom, quantitat, preu, total) {
+    for (let i = 0; i < n_columnes; i++) {
+        let columna = document.createElement("td");
+        columna = fila.insertCell(i);
 
+        switch (i) {
+            case 0:
+                columna.setAttribute("class", "codi");
+                columna.innerHTML = codi;
+                break;
+
+            case 1:
+                columna.setAttribute("class", "nom");
+                columna.innerHTML = nom;
+                break;
+
+            case 2:
+                let input = document.createElement("input");
+                input.setAttribute("type", "number");
+                input.setAttribute("value", quantitat);
+                input.setAttribute("class", "quantitat");
+                input.addEventListener("change", calcularTotal);
+                input.addEventListener("change", canvisTotal);
+                columna.appendChild(input);
+                break;
+
+            case 3:
+                columna.setAttribute("class", "preu");
+                columna.innerHTML = preu;
+                break;
+
+            case 4:
+                columna.setAttribute("class", "total");
+                columna.innerHTML = total;
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+//Carrega una factura guardada al LocalStorage
 function recuperarFactura(){
     var codi = document.getElementsByTagName("input")[document.getElementsByTagName("input").length -1].value;
     if (codi.includes("/")) {
@@ -157,11 +174,10 @@ function recuperarFactura(){
             document.getElementsByTagName("p")[3].innerHTML = factura_recuperada.getImportFactura();
         }
     }
-
-    return factura_recuperada;
     
 }
 
+//Afegeix onclick a recuperarFactura
 function laodRecuperar() {
     var botoRecuperar = document.getElementsByTagName("button")[1];
     botoRecuperar.onclick = recuperarFactura;
