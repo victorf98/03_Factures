@@ -1,5 +1,3 @@
-import { crearColumnes } from "./article.mjs";
-
 class Factura{
     constructor(codi_factura, codis, noms, quantitats, preus, totals, base_imposable, iva, import_factura){
         this.codi_factura = codi_factura;
@@ -87,8 +85,7 @@ class Factura{
     }
 }
 
-var nFactura = parseInt(localStorage.getItem("last_key")) + 1;
-var factura = new Factura(nFactura);
+var factura = new Factura(parseInt(localStorage.getItem("last_key")) + 1);
 
 function novaFactura(){
     document.getElementsByTagName("p")[0].innerHTML = "2022/" + factura.getCodiFactura();
@@ -118,7 +115,14 @@ function canvisTotal() {
     document.getElementsByTagName("p")[3].innerHTML = (parseFloat(base_imposable) + parseFloat(iva)).toFixed(2);
     var total = document.getElementsByTagName("p")[3].innerHTML;
 
-    
+    var codi_html = document.getElementsByTagName("input")[document.getElementsByTagName("input").length -1].value;
+    var codi_separat = codi_html.split("/");
+
+    //Quan es recupera una factura fiquem el nº de factura de la factura recuperada a l'objecte factura que fem servir
+    if (parseInt(localStorage.getItem("last_key") + 1) > parseInt(codi_separat[1])) {
+        factura.setCodiFactura(parseInt(codi_separat[1]));
+    }
+
     if (total != 0) {
         let taula = document.getElementsByTagName("table")[0];
         let n_files = taula.rows.length;
@@ -154,52 +158,22 @@ function canvisTotal() {
         factura.setIva(iva);
         factura.setImportFactura(import_factura);
 
-        if (factura.getCodiFactura() > parseInt(localStorage.getItem("last_key"))) {
+        //Canviarem la "last_key" només quan sigui una factura nova (no recuperada)
+        if (parseInt(factura.getCodiFactura()) > parseInt(localStorage.getItem("last_key"))) {
             localStorage.setItem("last_key", factura.getCodiFactura().toString());
         }
-        localStorage.setItem(factura.getCodiFactura().toString(), JSON.stringify(factura))
+        localStorage.setItem(factura.getCodiFactura().toString(), JSON.stringify(factura));
         
     }else{
-        localStorage.removeItem(factura.getCodiFactura().toString())
-        localStorage.setItem("last_key", (factura.getCodiFactura() - 1).toString())
-    }
-}
+        localStorage.removeItem(factura.getCodiFactura().toString());
 
-function recuperarFactura(){
-    var codi = document.getElementsByTagName("input")[document.getElementsByTagName("input").length -1].value;
-    if (codi.includes("/")) {
-        var codi_separat = codi.split("/");
-        var factura_a_recuperar = localStorage.getItem(codi_separat[1].toString());
-        if (codi_separat[0] == 2022 && factura_a_recuperar != null && codi_separat.length == 2) {
-            var factura_recuperada = new Factura(JSON.parse(factura_a_recuperar).codi_factura, JSON.parse(factura_a_recuperar).codis,
-            JSON.parse(factura_a_recuperar).noms, JSON.parse(factura_a_recuperar).quantitats, JSON.parse(factura_a_recuperar).preus,
-            JSON.parse(factura_a_recuperar).totals, JSON.parse(factura_a_recuperar).base_imposable, JSON.parse(factura_a_recuperar).iva,
-            JSON.parse(factura_a_recuperar).import_factura);
-            
-            console.log(factura_recuperada);
-            document.getElementsByTagName("p")[0].innerHTML = "2022/" + factura_recuperada.getCodiFactura();
-
-            var taula = document.getElementsByTagName("table")[0];
-            taula.innerHTML = "<tr><th>Codi</th><th>Nom</th><th>Quantitat</th><th>Preu</th><th>Total</th></tr>";
-            var n_columnes = taula.rows[0].cells.length;
-            for (let x = 0; x < factura_recuperada.getCodis().length; x++) {
-                var n_files = taula.rows.length;
-                var fila = taula.insertRow(n_files);
-                crearColumnes(n_columnes, fila, factura_recuperada.getCodis()[x], factura_recuperada.getNoms()[x], 
-                factura_recuperada.getQuantitats()[x], factura_recuperada.getPreus()[x], factura_recuperada.getTotals()[x]);   
-            }
-
-            document.getElementsByTagName("p")[1].innerHTML = factura_recuperada.getBaseImposable();
-            document.getElementsByTagName("p")[2].innerHTML = factura_recuperada.getIva();
-            document.getElementsByTagName("p")[3].innerHTML = factura_recuperada.getImportFactura();
+        //Canviarem la "last_key" només quan sigui una factura nova (no recuperada)
+        if (parseInt(factura.getCodiFactura()) > parseInt(localStorage.getItem("last_key"))){
+            localStorage.setItem("last_key", (factura.getCodiFactura() - 1).toString());
         }
+        var taula = document.getElementsByTagName("table")[0];
+        taula.innerHTML = "<tr><th>Codi</th><th>Nom</th><th>Quantitat</th><th>Preu</th><th>Total</th></tr>";
     }
-    
 }
 
-function laodRecuperar() {
-    var botoRecuperar = document.getElementsByTagName("button")[1];
-    botoRecuperar.onclick = recuperarFactura;
-}
-
-export {calcularTotal, canvisTotal, novaFactura, laodRecuperar};
+export {calcularTotal, canvisTotal, novaFactura, Factura};
