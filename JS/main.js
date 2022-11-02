@@ -92,6 +92,44 @@ function loadAfegir() {
     botoAfegir.onclick = afegirArticle;
 }
 
+//Carrega una factura guardada al LocalStorage
+function recuperarFactura(){
+    var codi = document.getElementsByTagName("input")[document.getElementsByTagName("input").length -1].value;
+    if (codi.includes("/")) {
+        var codi_separat = codi.split("/");
+        var factura_a_recuperar = localStorage.getItem(codi_separat[1].toString());
+        if (codi_separat[0] == 2022 && factura_a_recuperar != null && codi_separat.length == 2) {
+            var factura_recuperada = new Factura(JSON.parse(factura_a_recuperar).codi_factura, JSON.parse(factura_a_recuperar).codis,
+            JSON.parse(factura_a_recuperar).noms, JSON.parse(factura_a_recuperar).quantitats, JSON.parse(factura_a_recuperar).preus,
+            JSON.parse(factura_a_recuperar).totals, JSON.parse(factura_a_recuperar).base_imposable, JSON.parse(factura_a_recuperar).iva,
+            JSON.parse(factura_a_recuperar).import_factura);
+            
+            document.getElementsByTagName("p")[0].innerHTML = "2022/" + factura_recuperada.getCodiFactura();
+
+            var taula = document.getElementsByTagName("table")[0];
+            taula.innerHTML = "<tr><th>Codi</th><th>Nom</th><th>Quantitat</th><th>Preu</th><th>Total</th></tr>";
+            var n_columnes = taula.rows[0].cells.length;
+            for (let x = 0; x < factura_recuperada.getCodis().length; x++) {
+                var n_files = taula.rows.length;
+                var fila = taula.insertRow(n_files);
+                crearColumnes(n_columnes, fila, factura_recuperada.getCodis()[x], factura_recuperada.getNoms()[x], 
+                factura_recuperada.getQuantitats()[x], factura_recuperada.getPreus()[x], factura_recuperada.getTotals()[x]);   
+            }
+
+            document.getElementsByTagName("p")[1].innerHTML = factura_recuperada.getBaseImposable();
+            document.getElementsByTagName("p")[2].innerHTML = factura_recuperada.getIva();
+            document.getElementsByTagName("p")[3].innerHTML = factura_recuperada.getImportFactura();
+        }
+    }
+    
+}
+
+//Afegeix onclick a recuperarFactura
+function laodRecuperar() {
+    var botoRecuperar = document.getElementsByTagName("button")[1];
+    botoRecuperar.onclick = recuperarFactura;
+}
+
 /**
  * Crea les columnes d'una nova fila amb els valors passats
  * 
@@ -103,7 +141,7 @@ function loadAfegir() {
  * @param {number} preu 
  * @param {number} total 
  */
-function crearColumnes(n_columnes, fila, codi, nom, quantitat, preu, total) {
+ function crearColumnes(n_columnes, fila, codi, nom, quantitat, preu, total) {
     for (let i = 0; i < n_columnes; i++) {
         let columna = document.createElement("td");
         columna = fila.insertCell(i);
@@ -143,42 +181,4 @@ function crearColumnes(n_columnes, fila, codi, nom, quantitat, preu, total) {
                 break;
         }
     }
-}
-
-//Carrega una factura guardada al LocalStorage
-function recuperarFactura(){
-    var codi = document.getElementsByTagName("input")[document.getElementsByTagName("input").length -1].value;
-    if (codi.includes("/")) {
-        var codi_separat = codi.split("/");
-        var factura_a_recuperar = localStorage.getItem(codi_separat[1].toString());
-        if (codi_separat[0] == 2022 && factura_a_recuperar != null && codi_separat.length == 2) {
-            var factura_recuperada = new Factura(JSON.parse(factura_a_recuperar).codi_factura, JSON.parse(factura_a_recuperar).codis,
-            JSON.parse(factura_a_recuperar).noms, JSON.parse(factura_a_recuperar).quantitats, JSON.parse(factura_a_recuperar).preus,
-            JSON.parse(factura_a_recuperar).totals, JSON.parse(factura_a_recuperar).base_imposable, JSON.parse(factura_a_recuperar).iva,
-            JSON.parse(factura_a_recuperar).import_factura);
-            
-            document.getElementsByTagName("p")[0].innerHTML = "2022/" + factura_recuperada.getCodiFactura();
-
-            var taula = document.getElementsByTagName("table")[0];
-            taula.innerHTML = "<tr><th>Codi</th><th>Nom</th><th>Quantitat</th><th>Preu</th><th>Total</th></tr>";
-            var n_columnes = taula.rows[0].cells.length;
-            for (let x = 0; x < factura_recuperada.getCodis().length; x++) {
-                var n_files = taula.rows.length;
-                var fila = taula.insertRow(n_files);
-                crearColumnes(n_columnes, fila, factura_recuperada.getCodis()[x], factura_recuperada.getNoms()[x], 
-                factura_recuperada.getQuantitats()[x], factura_recuperada.getPreus()[x], factura_recuperada.getTotals()[x]);   
-            }
-
-            document.getElementsByTagName("p")[1].innerHTML = factura_recuperada.getBaseImposable();
-            document.getElementsByTagName("p")[2].innerHTML = factura_recuperada.getIva();
-            document.getElementsByTagName("p")[3].innerHTML = factura_recuperada.getImportFactura();
-        }
-    }
-    
-}
-
-//Afegeix onclick a recuperarFactura
-function laodRecuperar() {
-    var botoRecuperar = document.getElementsByTagName("button")[1];
-    botoRecuperar.onclick = recuperarFactura;
 }
