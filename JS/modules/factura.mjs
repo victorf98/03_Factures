@@ -85,7 +85,11 @@ class Factura{
     }
 }
 
-var factura = new Factura(parseInt(localStorage.getItem("last_key")) + 1);
+if (localStorage.getItem("last_key") == null) {
+    var factura = new Factura(1);
+}else{
+    var factura = new Factura(parseInt(localStorage.getItem("last_key")) + 1);
+}
 
 //Carrega el nº d'una nova factura
 function novaFactura(){
