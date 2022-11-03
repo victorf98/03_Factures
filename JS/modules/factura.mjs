@@ -166,7 +166,7 @@ function canvisTotal() {
         factura.setImportFactura(import_factura);
 
         //Canviarem la "last_key" només quan sigui una factura nova (no recuperada)
-        if (parseInt(factura.getCodiFactura()) > parseInt(localStorage.getItem("last_key"))) {
+        if (parseInt(factura.getCodiFactura()) > parseInt(localStorage.getItem("last_key")) || localStorage.getItem("last_key") == null) {
             localStorage.setItem("last_key", factura.getCodiFactura().toString());
         }
         localStorage.setItem(factura.getCodiFactura().toString(), JSON.stringify(factura));
