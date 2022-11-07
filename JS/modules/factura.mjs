@@ -101,9 +101,10 @@ function calcularTotal() {
     var inputs = document.getElementsByClassName("quantitat");
     var totals = document.getElementsByClassName("total");
     var preus = document.getElementsByClassName("preu");
+    var descompte = document.getElementsByClassName("descompte");
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].value >= 0 && inputs[i].value <= 10) {
-            totals[i].innerHTML = inputs[i].value * preus[i].innerHTML;            
+            totals[i].innerHTML = inputs[i].value * preus[i].innerHTML - inputs[i].value * preus[i].innerHTML * (descompte[i].value / 100);
         }
     }
 }

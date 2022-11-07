@@ -158,6 +158,12 @@ function laodRecuperar() {
                 break;
 
             case 2:
+                let inputResta = document.createElement("input");
+                inputResta.setAttribute("type", "button");
+                inputResta.setAttribute("value", "-");
+                inputResta.setAttribute("class", "resta");
+                inputResta.onclick = restarQuantitat;
+                columna.appendChild(inputResta);
                 let input = document.createElement("input");
                 input.setAttribute("type", "number");
                 input.setAttribute("value", quantitat);
@@ -165,14 +171,30 @@ function laodRecuperar() {
                 input.addEventListener("change", calcularTotal);
                 input.addEventListener("change", canvisTotal);
                 columna.appendChild(input);
+                let inputSuma = document.createElement("input");
+                inputSuma.setAttribute("type", "button");
+                inputSuma.setAttribute("value", "+");
+                inputSuma.setAttribute("class", "suma");
+                inputSuma.onclick = sumarQuantitat;
+                columna.appendChild(inputSuma);
                 break;
 
             case 3:
                 columna.setAttribute("class", "preu");
                 columna.innerHTML = preu;
                 break;
-
+            
             case 4:
+                let descompte = document.createElement("input");
+                descompte.setAttribute("type", "number");
+                descompte.setAttribute("class", "descompte");
+                descompte.setAttribute("value", 0);
+                descompte.addEventListener("change", calcularTotal);
+                descompte.addEventListener("change", canvisTotal);
+                columna.appendChild(descompte);
+                break;
+
+            case 5:
                 columna.setAttribute("class", "total");
                 columna.innerHTML = total;
                 break;
@@ -181,4 +203,12 @@ function laodRecuperar() {
                 break;
         }
     }
+}
+
+function restarQuantitat() {
+    
+}
+
+function sumarQuantitat() {
+    
 }
